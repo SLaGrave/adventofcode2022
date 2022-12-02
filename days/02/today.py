@@ -8,26 +8,32 @@ def get_data() -> list:
     # data = [int(q) for q in data]
     return data
 
+SCORE_VALUE = {"rock": 1, "paper": 2, "scissors": 3}
+ENEMY_MAPPING = {"A": "rock", "B": "paper", "C": "scissors"}
+ME_MAPPING = {"X": "rock", "Y": "paper", "Z": "scissors"}
+GOAL_MAPPING = {"X": "lose", "Y": "draw", "Z": "win"}
+
+def play_game(me, enemy) -> int:
+    if me == enemy: return 3
+    if me == "rock" and enemy == "scissors": return 6
+    if me == "paper" and enemy == "rock": return 6
+    if me == "scissors" and enemy == "paper": return 6
+    return 0
+
+def get_move(goal, enemy) -> str:
+    if goal == "draw": return enemy
+    if enemy == "rock": return "paper" if goal=="win" else "scissors"
+    if enemy == "paper": return "scissors" if goal=="win" else "rock"
+    if enemy == "scissors": return "rock" if goal=="win" else "paper"
+
+
 def part_one(data: list) -> int:
     scores = list()
     for item in data:
         plays = item.split(" ")
-        addition = 0
-        if plays[0] == "A":
-            if plays[1] == "Y": addition += 6
-            if plays[1] == "Z": addition += 0
-            if plays[1] == "X": addition += 3
-        if plays[0] == "B":
-            if plays[1] == "Y": addition += 3
-            if plays[1] == "Z": addition += 6
-            if plays[1] == "X": addition += 0
-        if plays[0] == "C":
-            if plays[1] == "Y": addition += 0
-            if plays[1] == "Z": addition += 3
-            if plays[1] == "X": addition += 6
-        if plays[1] == "X": scores.append(1+addition)
-        if plays[1] == "Y": scores.append(2+addition)
-        if plays[1] == "Z": scores.append(3+addition)
+        me = ME_MAPPING[plays[1]]
+        enemy = ENEMY_MAPPING[plays[0]]
+        scores.append(SCORE_VALUE[me] + play_game(me, enemy))
 
     return sum(scores)
 
@@ -36,39 +42,10 @@ def part_two(data: list) -> int:
     scores = list()
     for item in data:
         plays = item.split(" ")
-        addition = 0
-        number = 0
-        if plays[0] == "A":
-            if plays[1] == "X":
-                addition += 0
-                number = 3
-            if plays[1] == "Y":
-                addition += 3
-                number = 1
-            if plays[1] == "Z":
-                addition += 6
-                number = 2
-        if plays[0] == "B":
-            if plays[1] == "X":
-                addition += 0
-                number = 1
-            if plays[1] == "Y":
-                addition += 3
-                number = 2
-            if plays[1] == "Z":
-                addition += 6
-                number = 3
-        if plays[0] == "C":
-            if plays[1] == "X":
-                addition += 0
-                number = 2
-            if plays[1] == "Y":
-                addition += 3
-                number = 3
-            if plays[1] == "Z":
-                addition += 6
-                number = 1
-        scores.append(number+addition)
+        goal = GOAL_MAPPING[plays[1]]
+        enemy = ENEMY_MAPPING[plays[0]]
+        move = get_move(goal, enemy)
+        scores.append(SCORE_VALUE[move] + play_game(move, enemy))
 
     return sum(scores)
 
