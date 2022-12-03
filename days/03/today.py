@@ -8,16 +8,21 @@ def get_data() -> list:
     # data = [int(q) for q in data]
     return data
 
+
+def calc_priority(item) -> int:
+    if ord(item) > 96:
+        return ord(item)-96
+    else:
+        return ord(item)-38
+
+
 def part_one(data: list) -> int:
     counter = 0
     for items in data:
         firstpart, secondpart = items[:len(items)//2], items[len(items)//2:]
         for item in firstpart:
             if item in secondpart:
-                if ord(item) > 96:
-                    counter += ord(item)-96
-                else:
-                    counter += ord(item)-38
+                counter += calc_priority(item)
                 break
     return counter
 
@@ -32,10 +37,7 @@ def part_two(data: list) -> int:
             break
         for item in one:
             if item in two and item in three:
-                if ord(item) > 96:
-                    counter += ord(item)-96
-                else:
-                    counter += ord(item)-38
+                counter += calc_priority(item)
                 break
         i += 3
     return counter
