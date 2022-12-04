@@ -3,7 +3,7 @@ def get_data() -> list:
     with open("./input.txt", "r") as f:
         data = f.readlines()
     # Strip end of line
-    # data = [q.strip() for q in data]
+    data = [q.strip() for q in data]
     # Make int
     # data = [int(q) for q in data]
     return data
